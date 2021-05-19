@@ -81,7 +81,7 @@ def singleReadQuery():
                 'Memory_Used' : [format(avg_memory_consumption, ".4f")],
                 'Cpu_Used' : [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
          dfToCsv.to_csv(f, index=False, header=False)
 
     #postgres read query
@@ -110,7 +110,7 @@ def singleReadQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
     #Neo4j read query
@@ -139,7 +139,7 @@ def singleReadQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
 def singleWriteQuery():
@@ -169,7 +169,7 @@ def singleWriteQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
     # postgres write query
@@ -198,7 +198,7 @@ def singleWriteQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
     # Neo4j write query
@@ -227,7 +227,7 @@ def singleWriteQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
 def aggregateQuery():
@@ -257,7 +257,7 @@ def aggregateQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
     # postgres aggregate query
@@ -286,7 +286,7 @@ def aggregateQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
     # Neo4j aggregate query
@@ -315,7 +315,7 @@ def aggregateQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
 
@@ -346,7 +346,7 @@ def neighborsQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
     # postgres neighbors query
@@ -375,7 +375,7 @@ def neighborsQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
     # Neo4j neighbors query
@@ -404,7 +404,7 @@ def neighborsQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
 def neighbors2Query():
@@ -434,7 +434,7 @@ def neighbors2Query():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
     # postgres neighbors2 query
@@ -463,7 +463,7 @@ def neighbors2Query():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
     # Neo4j neighbors2 query
@@ -492,7 +492,7 @@ def neighbors2Query():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
 
@@ -523,7 +523,7 @@ def neighbors2dataQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
     # postgres neighbors2data query
@@ -552,7 +552,7 @@ def neighbors2dataQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
     # Neo4j neighbors2data query
@@ -581,7 +581,7 @@ def neighbors2dataQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
 
@@ -613,7 +613,7 @@ def shortestpathQuery():
                'Memory_Used': [format(avg_memory_consumption, ".4f")],
                'Cpu_Used': [format(avg_cpu_consumption, ".4f")]}
     dfToCsv = pd.DataFrame(newRows)
-    with open('/results/benchmarkingResults.csv', 'a+', newline='') as f:
+    with open('/results/benchmarkingResults.csv', 'a', newline='') as f:
         dfToCsv.to_csv(f, index=False, header=False)
 
 

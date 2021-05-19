@@ -1,5 +1,4 @@
 import os.path
-import csv
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime, timedelta
@@ -9,15 +8,6 @@ from dailyBenchamarking import downloadDatasets,convertDatasetsToJson,\
 
 
 def download_And_Extract_Dataset():
-    # create csv file with headers if not exists to store benchmarking results
-    if os.path.isfile("/results/benchmarkingResults.csv"):
-        print("benchmarkingResults.csv already exists")
-    else:
-        with open('/results/benchmarkingResults.csv', 'a+', newline='') as csvfile:
-            headers = ['Date', 'Database', 'Query', 'Avg_Exec_Time', 'Avg_Memory_Used', 'Avg_Cpu_Used']
-            csv_writer = csv.writer(csvfile)
-            csv_writer.writerow(headers)  # write header
-
     downloadDatasets()
 
 def convert_datasets_to_json():

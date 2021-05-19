@@ -4,8 +4,8 @@ import os
 
 def text_to_json_Profiles_table():
 
-    if os.path.isfile("/temp/soc-pokec-relationships.txt"):
-        print("profiles.json dataset already exists")
+    if os.path.isfile("/temp/data.json"):
+        print("data.json dataset already exists")
     else:
         profile_data = []
         columns = ['user_id','public','completion_percentage','gender','region',
@@ -39,7 +39,7 @@ def text_to_json_Profiles_table():
 
 def text_to_json_Relationship_table():
 
-    if os.path.isfile("/temp/soc-pokec-relationships.txt"):
+    if os.path.isfile("/temp/relations.json"):
         print("relations.json dataset already exists")
     else:
         relationship_data = []

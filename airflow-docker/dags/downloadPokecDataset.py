@@ -4,6 +4,7 @@ from urllib import request
 import gzip
 import shutil
 import os
+import csv
 
 
 def downloadDataset():
@@ -48,6 +49,15 @@ def downloadDataset():
         #os.remove("./dags/soc-pokec-relationships.txt.gz")
 
         print("Downloading pokec dataset finished..")
+
+    # create csv file with headers if not exists to store benchmarking results
+    if os.path.isfile("/results/benchmarkingResults.csv"):
+        print("benchmarkingResults.csv already exists")
+    else:
+        with open('/results/benchmarkingResults.csv', 'a+', newline='') as csvfile:
+            headers = ['Date', 'Database', 'Query', 'Avg_Exec_Time', 'Avg_Memory_Used', 'Avg_Cpu_Used']
+            csv_writer = csv.writer(csvfile)
+            csv_writer.writerow(headers)  # write header
 
 
 
