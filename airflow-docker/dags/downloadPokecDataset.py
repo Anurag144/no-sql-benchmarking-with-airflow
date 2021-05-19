@@ -8,35 +8,48 @@ import os
 
 def downloadDataset():
 
-    print("Downloading relationships dataset started..")
-    url1 = "https://snap.stanford.edu/data/soc-pokec-relationships.txt.gz"
-    file_name1 = re.split(pattern='/', string=url1)[-1]
-    r1 = urllib.request.urlretrieve(url=url1, filename=file_name1)
+    if os.path.isfile("/temp/soc-pokec-relationships.txt"):
+        print("relations dataset already exists")
+    else:
+        print("Downloading relationships dataset started..")
+        url1 = "http://snap.stanford.edu/data/soc-pokec-relationships.txt.gz"
+        file_name1 = re.split(pattern='/', string=url1)[-1]
+        file_name1 = "/temp/" + file_name1
+        r1 = urllib.request.urlretrieve(url=url1, filename=file_name1)
 
-    print("Downloading relationships done..")
+        path = os.path.abspath("soc-pokec-relationships.txt.gz")
+        print(path)
 
-    with gzip.open(file_name1, 'rb') as f_in:
-       with open("./dags/soc-pokec-relationships.txt", 'wb') as f_out:
-            shutil.copyfileobj(f_in, f_out)
+        print("Downloading relationships done..")
 
-    print("extracting relationships done..")
+        with gzip.open(file_name1, 'rb') as f_in:
+           with open("/temp/soc-pokec-relationships.txt", 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
 
-    print("Downloading profiles dataset started..")
-    url1 = "https://snap.stanford.edu/data/soc-pokec-profiles.txt.gz"
-    file_name1 = re.split(pattern='/', string=url1)[-1]
-    r1 = urllib.request.urlretrieve(url=url1, filename=file_name1)
+        print("extracting relationships done..")
 
-    print("Downloading profiles done..")
+    if os.path.isfile("/temp/soc-pokec-profiles.txt"):
+        print("profiles dataset already exists")
+    else:
+        print("Downloading profiles dataset started..")
+        url1 = "http://snap.stanford.edu/data/soc-pokec-profiles.txt.gz"
+        file_name1 = re.split(pattern='/', string=url1)[-1]
+        file_name1 = "/temp/" + file_name1
+        r1 = urllib.request.urlretrieve(url=url1, filename=file_name1)
 
-    with gzip.open(file_name1, 'rb') as f_in:
-        with open("./dags/soc-pokec-profiles.txt", 'wb') as f_out:
-            shutil.copyfileobj(f_in, f_out)
-    print("extracting profiles done..")
+        print("Downloading profiles done..")
 
-    #os.remove("./dags/soc-pokec-profiles.txt.gz")
-    #os.remove("./dags/soc-pokec-relationships.txt.gz")
+        with gzip.open(file_name1, 'rb') as f_in:
+            with open("/temp/soc-pokec-profiles.txt", 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+        print("extracting profiles done..")
 
-    print("Downloading pokec dataset finished..")
+        #os.remove("./dags/soc-pokec-profiles.txt.gz")
+        #os.remove("./dags/soc-pokec-relationships.txt.gz")
+
+        print("Downloading pokec dataset finished..")
+
+
 
 if __name__ == "__main__":
 

@@ -19,8 +19,8 @@ def create_connection():
     try:
 
         driver = Graph(connection_string, user=username, password=password)
-        print("Connection to neo4j is established.")
-        print(driver)
+        #print("Connection to neo4j is established.")
+
         return driver
 
     except Exception as e:
@@ -28,7 +28,7 @@ def create_connection():
 
 
 def insertNodesIntoProfiles():
-    with open('./dags/data.json', errors='ignore') as json_data:
+    with open('/temp/data.json', errors='ignore') as json_data:
         data = json.load(json_data)
 
     driver = create_connection()
@@ -38,7 +38,7 @@ def insertNodesIntoProfiles():
 def createRelationships():
     driver = create_connection()
 
-    with open('./dags/relations.json', errors='ignore') as json_data:
+    with open('/temp/relations.json', errors='ignore') as json_data:
         data = json.load(json_data)
 
     _fromList =[d['_from'] for d in data]
@@ -73,11 +73,11 @@ def createUserIDList():
 
 
 def singleRead():
-
     driver = create_connection()
+    randomUserIDList = createUserIDList()
     start_time = datetime.datetime.now()
 
-    my_node = driver.evaluate('MATCH (a:profiles) RETURN a')
+    my_node = driver.evaluate('MATCH (a:profiles {user_id: "%s"}) RETURN a' % (randomUserIDList[0]))
 
     end_time = datetime.datetime.now()
     #print(my_node)
@@ -85,10 +85,9 @@ def singleRead():
 
 def singleWrite():
     driver = create_connection()
+    randomUserIDList = createUserIDList()
     start_time = datetime.datetime.now()
-
-    write = driver.run('CREATE (n:profiles) SET n.user_id = 5420, n.AGE = 23')
-
+    write = driver.run('MATCH (n:profiles {user_id: "%s"}) SET n.AGE = "%s"' % (randomUserIDList[0], randomUserIDList[1]))
     end_time = datetime.datetime.now()
     return (end_time - start_time).total_seconds() * 1000
 

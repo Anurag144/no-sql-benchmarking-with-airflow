@@ -17,7 +17,7 @@ def create_connection():
         conn_string = "mongodb://"+username+":"+password+"@"+"airflow-docker_mongodb_container_1"+"/" # <----enter username,pwd,host address and port no accordingly
         myclient = MongoClient(conn_string)
         print("Connected successfully!!!")
-        print(myclient)
+        #print(myclient)
     except:
         print("Could not connect to MongoDB")
 
@@ -53,7 +53,7 @@ def insertIntoProfilesCollection():
     db = myclient.test
     profileCol = db.profiles
     # Loading or Opening the json file
-    with open('./dags/data.json', errors='ignore') as json_data:
+    with open('/temp/data.json', errors='ignore') as json_data:
         data = json.load(json_data)
     # Inserting the loaded data in the Collection
     # if JSON contains data more than one entry
@@ -70,7 +70,7 @@ def insertIntoRelationsCollection():
     db = myclient.test
     relationsCol = db.relations
     # Loading or Opening the json file
-    with open('./dags/relations.json', errors='ignore') as json_data:
+    with open('/temp/relations.json', errors='ignore') as json_data:
         data = json.load(json_data)
     # Inserting the loaded data in the Collection
     # if JSON contains data more than one entry
@@ -127,10 +127,11 @@ def singleRead():
     myclient = create_connection()
     db = myclient.test
     mycol = db.profiles
+    randomUserIDList = neo4jBenchmarkTest.createUserIDList()
     start_time = datetime.datetime.now()
-    x = mycol.find_one()
+    x = mycol.find_one({"user_id": randomUserIDList[0]})
     end_time = datetime.datetime.now()
-    #print(x)
+    # print(x)
     myclient.close()
     return (end_time - start_time).total_seconds() * 1000
 
@@ -138,10 +139,10 @@ def singleWrite():
     myclient = create_connection()
     db = myclient.test
     mycol = db.profiles
-    with open('./dags/data.json', errors='ignore') as json_data:
-        data = json.load(json_data)
+    randomUserIDList = neo4jBenchmarkTest.createUserIDList()
     start_time = datetime.datetime.now()
-    mycol.insert_one(data[400])
+    singleWriteResult = mycol.update_one({"user_id": randomUserIDList[0]}, {"$set": {"AGE": randomUserIDList[1]}})
+    start_time = datetime.datetime.now()
     end_time = datetime.datetime.now()
     myclient.close()
     return (end_time - start_time).total_seconds() * 1000

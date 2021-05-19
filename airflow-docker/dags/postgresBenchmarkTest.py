@@ -16,10 +16,9 @@ def create_connection():
     #
     #                        password=secret"")
 
-    conn = psycopg2.connect("host=airflow-docker_postgres_container_1 dbname=postgres user=postgres password=secret")
+    conn = psycopg2.connect("host=airflow-docker_postgres_container_1 user=postgres password=secret")
     conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     conn.autocommit = True
-    print(conn)
     return conn
 
 def create_database():
@@ -54,7 +53,7 @@ def create_tables():
     try:
         conn = create_connection()
         cur = conn.cursor()
-        with open('./dags/data.json', errors='ignore') as json_data:
+        with open('/temp/data.json', errors='ignore') as json_data:
             data = json.load(json_data)
         columnData = list(data[0].keys())
         queryData = "CREATE TABLE profiles ( " + columnData[0] + " INTEGER PRIMARY KEY"
@@ -64,7 +63,7 @@ def create_tables():
 
         cur.execute(queryData)
 
-        with open('./dags/relations.json', errors='ignore') as json_data:
+        with open('/temp/relations.json', errors='ignore') as json_data:
             data = json.load(json_data)
         columnData = list(data[0].keys())
         queryRelations = "CREATE TABLE relations ( " + columnData[0] + " text," + columnData[1] + " text );"
@@ -123,7 +122,7 @@ def drop_tables(table_name):
     try:
         conn = create_connection()
         cur = conn.cursor()
-        query = "DROP TABLE " + table_name + ';'
+        query = "DROP TABLE " + table_name
 
         cur.execute(query)
 
@@ -150,7 +149,7 @@ def Insert_INTO_profiles_table():
 
     try:
         #use Python's open() function to load the JSON data
-        with open('./dags/data.json',errors='ignore') as json_data:
+        with open('/temp/data.json',errors='ignore') as json_data:
             data = json.load(json_data)
             query_sql = """ insert into profiles
                     select * from json_populate_recordset(NULL::profiles, %s) """
@@ -175,7 +174,7 @@ def Insert_INTO_relations_table():
 
     try:
         #use Python's open() function to load the JSON data
-        with open('./dags/relations.json',errors='ignore') as json_data:
+        with open('/temp/relations.json',errors='ignore') as json_data:
             data = json.load(json_data)
             query_sql = """ insert into relations
                     select * from json_populate_recordset(NULL::relations, %s) """
@@ -231,13 +230,13 @@ def singleRead():
 def singleWrite():
 
     try:
-        select_profiles_query = "INSERT INTO profiles (user_id, AGE) VALUES (%s,%s)"
-        record_to_insert = ('5320', '23')
+        randomUserIDList = neo4jBenchmarkTest.createUserIDList()
+        select_profiles_query = "UPDATE profiles SET Age = '%s' WHERE user_id = '%s'"%(randomUserIDList[0],randomUserIDList[1])
         conn = create_connection()
         cur = conn.cursor()
         start_time = datetime.datetime.now()
 
-        cur.execute(select_profiles_query,record_to_insert)
+        cur.execute(select_profiles_query)
 
         end_time = datetime.datetime.now()
         cur.close()
@@ -269,11 +268,11 @@ def Read_relationship_table():
         end_time = datetime.datetime.now()
         execTime = (end_time - start_time).total_seconds() * 1000
         relations = cur.fetchall()
-        print("Table contents after insertion ::")
-        print(relations)
-        print("Query execution time = %s Milliseconds" % execTime)
-        print(f"CPU used = {cpuMemoryList[0]:.4f}%")
-        print(f"MEMORY used = {cpuMemoryList[1]:.4f}%")
+        # print("Table contents after insertion ::")
+        # print(relations)
+        # print("Query execution time = %s Milliseconds" % execTime)
+        # print(f"CPU used = {cpuMemoryList[0]:.4f}%")
+        # print(f"MEMORY used = {cpuMemoryList[1]:.4f}%")
 
         cur.close()
 
