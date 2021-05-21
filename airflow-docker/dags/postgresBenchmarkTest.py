@@ -8,23 +8,19 @@ import mongodbBenchmarkTest,neo4jBenchmarkTest
 
 ###Check connection
 
-def create_connection():
-
-    # conn = psycopg2.connect("user=postgres,
-    #
-    #                        host=airflow-docker_postgres_container_1,
-    #
-    #                        password=secret"")
-
-    conn = psycopg2.connect("host=airflow-docker_postgres_container_1 user=postgres password=secret")
+def create_connection(containerName):
+    containerName = containerName
+    connection_url = "host={} user=postgres password=secret".format(containerName)
+    conn = psycopg2.connect(connection_url)
     conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     conn.autocommit = True
     return conn
 
-def create_database():
-
+def create_database(containerName):
+    global conn
     try:
-        conn = create_connection()
+        containerName = containerName
+        conn = create_connection(containerName)
         cur = conn.cursor()
         query = 'CREATE DATABASE test'
         cur.execute(query)
@@ -48,10 +44,11 @@ def create_database():
             conn.close()
 
 
-def create_tables():
-
+def create_tables(containerName):
+    global conn
     try:
-        conn = create_connection()
+        containerName = containerName
+        conn = create_connection(containerName)
         cur = conn.cursor()
         with open('/temp/data.json', errors='ignore') as json_data:
             data = json.load(json_data)
@@ -90,10 +87,11 @@ def create_tables():
 
 
 
-def drop_database():
-
+def drop_database(containerName):
+    global conn
     try:
-        conn = create_connection()
+        containerName = containerName
+        conn = create_connection(containerName)
         cur = conn.cursor()
         query = 'DROP DATABASE test'
         cur.execute(query)
@@ -118,11 +116,14 @@ def drop_database():
 
 
 
-def drop_tables(table_name):
+def drop_tables(table_name,containerName):
+    global conn
+    table_name = table_name
     try:
-        conn = create_connection()
+        containerName = containerName
+        conn = create_connection(containerName)
         cur = conn.cursor()
-        query = "DROP TABLE " + table_name
+        query = "DROP TABLE " + table_name + ';'
 
         cur.execute(query)
 
@@ -145,15 +146,16 @@ def drop_tables(table_name):
 
 
 
-def Insert_INTO_profiles_table():
-
+def Insert_INTO_profiles_table(containerName):
+    global conn
     try:
         #use Python's open() function to load the JSON data
         with open('/temp/data.json',errors='ignore') as json_data:
             data = json.load(json_data)
             query_sql = """ insert into profiles
                     select * from json_populate_recordset(NULL::profiles, %s) """
-            conn = create_connection()
+            containerName = containerName
+            conn = create_connection(containerName)
             cur = conn.cursor()
             cur.execute(query_sql, (json.dumps(data),))
             conn.commit()
@@ -170,7 +172,8 @@ def Insert_INTO_profiles_table():
             conn.close()
 
 
-def Insert_INTO_relations_table():
+def Insert_INTO_relations_table(containerName):
+    global conn
 
     try:
         #use Python's open() function to load the JSON data
@@ -178,8 +181,8 @@ def Insert_INTO_relations_table():
             data = json.load(json_data)
             query_sql = """ insert into relations
                     select * from json_populate_recordset(NULL::relations, %s) """
-
-            conn = create_connection()
+            containerName = containerName
+            conn = create_connection(containerName)
             cur = conn.cursor()
             cur.execute(query_sql, (json.dumps(data),))
             conn.commit()
@@ -196,12 +199,13 @@ def Insert_INTO_relations_table():
 
             conn.close()
 
-def singleRead():
-
+def singleRead(containerName):
+    global conn
     try:
         randomUserIDList = neo4jBenchmarkTest.createUserIDList()
         select_profiles_query = "SELECT * FROM profiles WHERE user_id = '%s'"%(randomUserIDList[0])
-        conn = create_connection()
+        containerName = containerName
+        conn = create_connection(containerName)
         cur = conn.cursor()
         start_time = datetime.datetime.now()
 
@@ -227,12 +231,14 @@ def singleRead():
             conn.close()
 
 
-def singleWrite():
-
+def singleWrite(containerName):
+    global conn
     try:
         randomUserIDList = neo4jBenchmarkTest.createUserIDList()
+        #print(randomUserIDList)
         select_profiles_query = "UPDATE profiles SET Age = '%s' WHERE user_id = '%s'"%(randomUserIDList[0],randomUserIDList[1])
-        conn = create_connection()
+        containerName = containerName
+        conn = create_connection(containerName)
         cur = conn.cursor()
         start_time = datetime.datetime.now()
 
@@ -253,11 +259,12 @@ def singleWrite():
             conn.close()
 
 
-def Read_relationship_table():
-
+def Read_relationship_table(containerName):
+    global conn
     try:
         select_relationship_query = "SELECT * FROM relations"
-        conn = create_connection()
+        containerName = containerName
+        conn = create_connection(containerName)
         cur = conn.cursor()
         cpuMemoryList = mongodbBenchmarkTest.calculateCPUandMemoryUsage(os.getpid())
         start_time = datetime.datetime.now()
@@ -268,11 +275,11 @@ def Read_relationship_table():
         end_time = datetime.datetime.now()
         execTime = (end_time - start_time).total_seconds() * 1000
         relations = cur.fetchall()
-        # print("Table contents after insertion ::")
-        # print(relations)
-        # print("Query execution time = %s Milliseconds" % execTime)
-        # print(f"CPU used = {cpuMemoryList[0]:.4f}%")
-        # print(f"MEMORY used = {cpuMemoryList[1]:.4f}%")
+        print("Table contents after insertion ::")
+        print(relations)
+        print("Query execution time = %s Milliseconds" % execTime)
+        print(f"CPU used = {cpuMemoryList[0]:.4f}%")
+        print(f"MEMORY used = {cpuMemoryList[1]:.4f}%")
 
         cur.close()
 
@@ -287,11 +294,12 @@ def Read_relationship_table():
             conn.close()
 
 
-def aggregate():
-
+def aggregate(containerName):
+    global conn
     try:
         aggregate_query = "select AGE, count(*) from profiles group by AGE"
-        conn = create_connection()
+        containerName = containerName
+        conn = create_connection(containerName)
         cur = conn.cursor()
         start_time = datetime.datetime.now()
 
@@ -314,12 +322,13 @@ def aggregate():
 
             conn.close()
 
-def neighbors():
-
+def neighbors(containerName):
+    global conn
     try:
         randomUserIDList = neo4jBenchmarkTest.createUserIDList()
         neighbors_query = "SELECT DISTINCT _to FROM relations WHERE _from = '%s'"%(randomUserIDList[0])
-        conn = create_connection()
+        containerName = containerName
+        conn = create_connection(containerName)
         cur = conn.cursor()
         start_time = datetime.datetime.now()
 
@@ -344,13 +353,14 @@ def neighbors():
             conn.close()
 
 
-def neighbors2():
-
+def neighbors2(containerName):
+    global conn
     try:
         randomUserIDList = neo4jBenchmarkTest.createUserIDList()
         neighbors2_query = "select _to from relations where _from = '%s' union distinct select _to from relations" \
                           " where _to != '%s' and _from in (select  _to from relations where _from = '%s')"%(randomUserIDList[0],randomUserIDList[0],randomUserIDList[0])
-        conn = create_connection()
+        containerName = containerName
+        conn = create_connection(containerName)
         cur = conn.cursor()
         start_time = datetime.datetime.now()
 
@@ -375,14 +385,15 @@ def neighbors2():
 
             conn.close()
 
-def neighbors2data():
-
+def neighbors2data(containerName):
+    global conn
     try:
         randomUserIDList = neo4jBenchmarkTest.createUserIDList()
         neighbors2data_query = "select * from profiles where user_id::text IN (select _to from relations where _from = '%s' union" \
                            " distinct select _to from relations where _to != '%s' and _from IN" \
                            " (select  _to from relations where _from = '%s'))"%(randomUserIDList[0],randomUserIDList[0],randomUserIDList[0])
-        conn = create_connection()
+        containerName = containerName
+        conn = create_connection(containerName)
         cur = conn.cursor()
         start_time = datetime.datetime.now()
 
@@ -405,7 +416,6 @@ def neighbors2data():
         if conn is not None:
 
             conn.close()
-
 
 if __name__ == "__main__":
     #create_database()

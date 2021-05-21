@@ -7,14 +7,15 @@ import psutil
 
 #------------- Create db connection and create database ----------------------------
 
-def create_connection():
+def create_connection(containerName):
     #host_address = "127.0.0.1"
     #port_no = "27017"
+    containerName = containerName
     username = "mongo"
     password = "secret"
 
     try:
-        conn_string = "mongodb://"+username+":"+password+"@"+"airflow-docker_mongodb_container_1"+"/" # <----enter username,pwd,host address and port no accordingly
+        conn_string = "mongodb://"+username+":"+password+"@"+containerName+"/" # <----enter username,pwd,host address and port no accordingly
         myclient = MongoClient(conn_string)
         print("Connected successfully!!!")
         #print(myclient)
@@ -23,8 +24,9 @@ def create_connection():
 
     return myclient
 
-def createDB():
-    myclient = create_connection()
+def createDB(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
 
     dblist = myclient.list_database_names()
     if "test" in dblist:
@@ -34,22 +36,25 @@ def createDB():
 
     myclient.close()
 
-def createProfileCollection():
-    myclient = create_connection()
+def createProfileCollection(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     db = myclient.test
     profilesCollection = db["profiles"]
     #print(db)
     myclient.close()
 
-def createRelationsCollection():
-    myclient = create_connection()
+def createRelationsCollection(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     db = myclient.test
     relationsCollection = db["relations"]
     #print(db)
     myclient.close()
 
-def insertIntoProfilesCollection():
-    myclient = create_connection()
+def insertIntoProfilesCollection(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     db = myclient.test
     profileCol = db.profiles
     # Loading or Opening the json file
@@ -65,8 +70,9 @@ def insertIntoProfilesCollection():
 
     myclient.close()
 
-def insertIntoRelationsCollection():
-    myclient = create_connection()
+def insertIntoRelationsCollection(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     db = myclient.test
     relationsCol = db.relations
     # Loading or Opening the json file
@@ -82,8 +88,9 @@ def insertIntoRelationsCollection():
 
     myclient.close()
 
-def readProfilesCollection():
-    myclient = create_connection()
+def readProfilesCollection(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     db = myclient.test
     mycol = db.profiles
     for x in mycol.find():
@@ -91,9 +98,9 @@ def readProfilesCollection():
 
     myclient.close()
 
-def readRelationsCollection():
-
-    myclient = create_connection()
+def readRelationsCollection(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     db = myclient.test
     mycol = db.relations
     for x in mycol.find():
@@ -101,30 +108,34 @@ def readRelationsCollection():
     myclient.close()
 
 
-def dropProfilesCollection():
-    myclient = create_connection()
+def dropProfilesCollection(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     db = myclient.test
     mycol = db.profiles
     mycol.drop()
     #print("profiles connection has been deleted.")
     myclient.close()
 
-def dropRelationsCollection():
-    myclient = create_connection()
+def dropRelationsCollection(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     db = myclient.test
     mycol = db.relations
     mycol.drop()
     #print("relations connection has been deleted.")
     myclient.close()
 
-def dropDatabase():
-    myclient = create_connection()
+def dropDatabase(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     myclient.drop_database('test')
     print("Test database has been deleted.")
     myclient.close()
 
-def singleRead():
-    myclient = create_connection()
+def singleRead(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     db = myclient.test
     mycol = db.profiles
     randomUserIDList = neo4jBenchmarkTest.createUserIDList()
@@ -135,8 +146,9 @@ def singleRead():
     myclient.close()
     return (end_time - start_time).total_seconds() * 1000
 
-def singleWrite():
-    myclient = create_connection()
+def singleWrite(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     db = myclient.test
     mycol = db.profiles
     randomUserIDList = neo4jBenchmarkTest.createUserIDList()
@@ -147,8 +159,9 @@ def singleWrite():
     myclient.close()
     return (end_time - start_time).total_seconds() * 1000
 
-def aggregate():
-    myclient = create_connection()
+def aggregate(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     db = myclient.test
     mycol = db.profiles
     start_time = datetime.datetime.now()
@@ -166,8 +179,9 @@ def aggregate():
     myclient.close()
     return (end_time - start_time).total_seconds() * 1000
 
-def neighbors():
-    myclient = create_connection()
+def neighbors(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     db = myclient.test
     mycol = db.relations
     randomUserIDList = neo4jBenchmarkTest.createUserIDList()
@@ -182,8 +196,9 @@ def neighbors():
     myclient.close()
     return (end_time - start_time).total_seconds() * 1000
 
-def neighbors2():
-    myclient = create_connection()
+def neighbors2(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     db = myclient.test
     mycol = db.relations
     #this is sql query
@@ -211,8 +226,9 @@ def neighbors2():
     return (end_time - start_time).total_seconds() * 1000
 
 
-def neighbors2data():
-    myclient = create_connection()
+def neighbors2data(containerName):
+    containerName = containerName
+    myclient = create_connection(containerName)
     db = myclient.test
     mycol = db.relations
 

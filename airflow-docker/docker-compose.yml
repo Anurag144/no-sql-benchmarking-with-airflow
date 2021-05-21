@@ -27,10 +27,11 @@ services:
     volumes:
       - ./dags:/usr/local/airflow/dags
       - ./plugins:/usr/local/airflow/plugins
+      - ./logs:/usr/local/airflow/logs
       - ./temp:/temp
       - ./results:/results
     ports:
-      - "8080:8080"
+      - "8081:8080"
     command: webserver
     healthcheck:
       test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
@@ -38,33 +39,71 @@ services:
       timeout: 30s
       retries: 3
 
-  mongodb_container:
+  mongodb_latest:
     image: mongo:latest
+    container_name: "mongodb_latest"
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongo
       MONGO_INITDB_ROOT_PASSWORD: secret
     ports:
-      - 27017:27017
+      - 27019:27017
     volumes:
-      - $HOME/mongodb_data/db:$HOME/mongodb_data/db
+      - $HOME/mongodb_data/mongodb_latest:/data/db
 
-  postgres_container:
+  postgres_latest:
       image: postgres:latest
+      container_name: "postgres_latest"
       volumes:
-        - $HOME/postgres_data/db:$HOME/postgres_data/db
+        - $HOME/postgres_data/postgres_latest:/var/lib/postgresql/data
       environment:
         - POSTGRES_PASSWORD=secret
         - POSTGRES_USER=postgres
       ports:
-        - "5433:5433"
+        - 5434:5432
 
-  neo4j_container:
+  neo4j_latest:
       image: neo4j:latest
-      volumes:
-        - $HOME/neo4j_data/db:$HOME/neo4j_data/db
-      ports:
-        # http and bolt access respectively
-        - 7474:7474
-        - 7687:7687
+      container_name: "neo4j_latest"
       environment:
         - NEO4J_AUTH=neo4j/test
+      volumes:
+        - $HOME/neo4j_data/neo4j_latest:/data
+      ports:
+        # http and bolt access respectively
+        - 7476:7474
+        - 3003:7687
+
+
+  mongodb_4.2:
+      image: mongo:4.2
+      container_name: "mongo_4.2"
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: mongo
+        MONGO_INITDB_ROOT_PASSWORD: secret
+      ports:
+        - 27018:27017
+      volumes:
+        - $HOME/mongodb_data/mongodb_4_2:/data/db
+
+  postgres_10.0:
+      image: postgres:10.0
+      container_name: "postgres_10.0"
+      volumes:
+        - $HOME/postgres_data/postgres_10_0:/var/lib/postgresql/data
+      environment:
+        - POSTGRES_PASSWORD=secret
+        - POSTGRES_USER=postgres
+      ports:
+        - 5435:5432
+
+  neo4j_4.2.5:
+      image: neo4j:4.2.5
+      container_name: "neo4j_4.2.5"
+      environment:
+        - NEO4J_AUTH=neo4j/test
+      volumes:
+        - $HOME/neo4j_data/neo4j_4_2_5:/data
+      ports:
+        # http and bolt access respectively
+        - 7477:7474
+        - 3004:7687

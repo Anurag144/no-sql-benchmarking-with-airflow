@@ -55,7 +55,7 @@ def downloadDataset():
         print("benchmarkingResults.csv already exists")
     else:
         with open('/results/benchmarkingResults.csv', 'a+', newline='') as csvfile:
-            headers = ['Date', 'Database', 'Query', 'Avg_Exec_Time', 'Avg_Memory_Used', 'Avg_Cpu_Used']
+            headers = ['Date', 'Database', 'Database Version', 'Query', 'Avg_Exec_Time_in_ms', 'Avg_Memory_Used_in_%', 'Avg_Cpu_Used_in_%']
             csv_writer = csv.writer(csvfile)
             csv_writer.writerow(headers)  # write header
 

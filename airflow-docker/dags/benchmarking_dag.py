@@ -44,12 +44,12 @@ def shortest_path_Query():
     shortestpathQuery()
 
 def delete_Databases_And_Dataset():
-    deleteDatabasesAndDataset()
+     deleteDatabasesAndDataset()
 
 
 
 with DAG(dag_id="benchmarking_dag",
-        schedule_interval="@daily",
+        schedule_interval='@daily',
         default_args={
             "owner": "airflow",
             "retries": 0,
@@ -136,21 +136,7 @@ with DAG(dag_id="benchmarking_dag",
         )
 
 
+####-------following lines runs queries sequentially----#######
 
-download_And_Extract_Dataset >> convert_datasets_to_json >> [setup_Postgres_Database, setup_Mongodb_Database, setup_Neo4j_Database]
-setup_Postgres_Database >> [single_Read_Query,single_Write_Query,aggregate_Query,neighbors_Query,neighbors2_Query,neighbors2_data_Query,shortest_path_Query] >> delete_Databases_And_Dataset
-setup_Mongodb_Database >> [single_Read_Query,single_Write_Query,aggregate_Query,neighbors_Query,neighbors2_Query,neighbors2_data_Query,shortest_path_Query]
-setup_Neo4j_Database >> [single_Read_Query,single_Write_Query,aggregate_Query,neighbors_Query,neighbors2_Query,neighbors2_data_Query,shortest_path_Query]
-
-
-# with DAG(dag_id="benchmarking_dag", default_args={
-#              "owner": "airflow",
-#              "retries": 0,
-#              "retry_delay": timedelta(minutes=5),
-#              "start_date": datetime(2021, 1, 1),
-#          },catchup=False)as dag:
-#
-#             PythonOperator(dag=dag,
-#                task_id='downloadDataset',
-#                provide_context=False,
-#                python_callable=downloadDataset)
+download_And_Extract_Dataset >> convert_datasets_to_json >> [setup_Postgres_Database, setup_Mongodb_Database, setup_Neo4j_Database] >> single_Read_Query >> single_Write_Query >> aggregate_Query \
+>> neighbors_Query >> neighbors2_Query >> neighbors2_data_Query >> shortest_path_Query >> delete_Databases_And_Dataset
