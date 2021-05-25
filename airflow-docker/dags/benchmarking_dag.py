@@ -132,11 +132,18 @@ with DAG(dag_id="benchmarking_dag",
         delete_Databases_And_Dataset = PythonOperator(
             task_id="delete_Databases_And_Dataset",
             provide_context=False,
+            trigger_rule='all_done',
             python_callable=delete_Databases_And_Dataset
         )
+
+download_And_Extract_Dataset >> convert_datasets_to_json >> [setup_Postgres_Database, setup_Mongodb_Database, setup_Neo4j_Database]
+setup_Postgres_Database >> [single_Read_Query,single_Write_Query,aggregate_Query,neighbors_Query,neighbors2_Query,neighbors2_data_Query,shortest_path_Query] >> delete_Databases_And_Dataset
+setup_Mongodb_Database >> [single_Read_Query,single_Write_Query,aggregate_Query,neighbors_Query,neighbors2_Query,neighbors2_data_Query,shortest_path_Query]
+setup_Neo4j_Database >> [single_Read_Query,single_Write_Query,aggregate_Query,neighbors_Query,neighbors2_Query,neighbors2_data_Query,shortest_path_Query]
+
 
 
 ####-------following lines runs queries sequentially----#######
 
-download_And_Extract_Dataset >> convert_datasets_to_json >> [setup_Postgres_Database, setup_Mongodb_Database, setup_Neo4j_Database] >> single_Read_Query >> single_Write_Query >> aggregate_Query \
->> neighbors_Query >> neighbors2_Query >> neighbors2_data_Query >> shortest_path_Query >> delete_Databases_And_Dataset
+# download_And_Extract_Dataset >> convert_datasets_to_json >> [setup_Postgres_Database, setup_Mongodb_Database, setup_Neo4j_Database] >> single_Read_Query >> single_Write_Query >> aggregate_Query \
+# >> neighbors_Query >> neighbors2_Query >> neighbors2_data_Query >> shortest_path_Query >> delete_Databases_And_Dataset
