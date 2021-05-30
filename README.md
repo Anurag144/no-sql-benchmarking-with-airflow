@@ -34,9 +34,9 @@ By this time all the database containers and apache airflow webserver should be 
 Apache airflow webserver has been exposed through port number 8081. Access the webserver using localhost and port 8081.
 Then run the dag and wait for it to finish. Once finished you will see the resulted csv file in results directory.
 
-##Queries and metrics used for benchmarking
+## Queries and metrics used for benchmarking
 
-###Queries
+### Queries
 - singleRead
 - singleWrite
 - aggregation
@@ -45,20 +45,20 @@ Then run the dag and wait for it to finish. Once finished you will see the resul
 - neighbors2data
 - shortestPath
 
-###Metrics
+### Metrics
 - Average Execution time
 - Average CPU usage
 - Average Memory usage
 
-##Configure number of times you want to run each query
-By default each query runs for 20 times. Execution time, cpu usage and memory usage are calulated as the average of these 20 runs.
+## Configure number of times you want to run each query
+By default each query    runs for 20 times. Execution time, cpu usage and memory usage are calulated as the average of these 20 runs.
 If you want to change this number and want to run queries as many times as you want, just change the following variable in dailyBenchmarking.py file.
 ```` bash
 # queries will be executed that many times and avg exec time,avg cpu and avg memory is returned
 number = 20
 ````
 
-##Add another version of mongodb, postgres or neo4j for benchmarking
+## Add another version of mongodb, postgres or neo4j for benchmarking
 Current setup supports two versions of each of three databases. If you want to add new version of any of the databases, just add the service in the docker-compose.yml file and name the container in following format.
 "databaseName_versionNumber" for example if you want to add mongodb 4.1, name the container as mongodb_4.1.
 
