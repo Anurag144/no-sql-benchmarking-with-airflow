@@ -3,7 +3,7 @@ This is a benchmarking tool for nosql databases currently supporting mongodb, po
 Benchamrking process is scheduled using apache airflow.This tool can be extended to include different other databases and their corresponding versions.
 
 ## Prerequisites 
-To run this tool all you need is a docker installed on your machine.We run docker containers of all the databases and of apache airflow. If you do not have docker installed please install it from here [here](https://www.docker.com/products/docker-desktop). Make sure your docker engine is up and running before you run the airflow.
+To run this tool all you need is a docker installed on your machine. We run docker containers of all the databases and of apache airflow. If you do not have docker installed please install it from [here](https://www.docker.com/products/docker-desktop). Make sure your docker engine is up and running before you run the airflow.
 
 ## Cloning the repository
 Use following command to clone the repository
